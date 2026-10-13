@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KMK Campus · Démo</title>
+<meta name="description" content="Démo interactive KMK Campus — espaces étudiant, formateur, scolarité, direction, finance et parent.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23E8F0FD'/%3E%3Cpath d='M32 15 55 24.5 32 34 9 24.5Z' fill='%231257E0'/%3E%3Cpath d='M17 28.5v9c0 4.5 6.7 8 15 8s15-3.5 15-8v-9' fill='none' stroke='%231257E0' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M55 24.5v11' stroke='%2338BDF8' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/kmk.css">
+<script>
+  /* garde d'accès : sans session, retour immédiat à la connexion */
+  (function () {
+    try {
+      var raw = sessionStorage.getItem('kmk-demo-session') || localStorage.getItem('kmk-demo-session');
+      var s = raw && JSON.parse(raw);
+      if (!s || Date.now() > s.exp) {
+        var next = (location.hash || '').replace(/^#\/?/, '').split('?')[0];
+        location.replace('index.html' + (s ? '?expired=1' : '') + (next ? (s ? '&' : '?') + 'next=' + encodeURIComponent(next) : ''));
+      }
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+<div class="approot">
+  <div class="demobar">
+    <span class="tag">DÉMO</span>
+    <span class="hide-sm">Données fictives · tout est enregistré dans votre navigateur · ouvrez deux onglets pour voir deux profils en direct</span>
+    <span class="sp"></span>
+    <a href="../index.html" data-ic="arrow-left">Présentation</a>
+    <button type="button" data-act="switch-role" data-ic="users">Changer de profil</button>
+    <button type="button" data-act="reset-demo" data-ic="rotate-ccw"><span class="hide-sm">Réinitialiser</span></button>
+  </div>
+
+  <div class="shell">
+    <aside class="side" id="side" aria-label="Navigation principale">
+      <div class="brand">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#E8F0FD"/><path d="M32 15 55 24.5 32 34 9 24.5Z" fill="#1257E0"/><path d="M17 28.5v9c0 4.5 6.7 8 15 8s15-3.5 15-8v-9" fill="none" stroke="#1257E0" stroke-width="3" stroke-linecap="round"/><path d="M55 24.5v11" stroke="#38BDF8" stroke-width="3" stroke-linecap="round"/></svg>
+        <div><div class="bt">KMK Campus</div><div class="bs">AI CAMPUS OS</div></div>
+      </div>
+      <div class="role-chip" id="roleChip"></div>
+      <nav class="nav" id="nav"></nav>
+      <div class="sfoot" id="sfoot"></div>
+    </aside>
+    <div class="navmask" data-act="close-nav"></div>
+
+    <div class="main" id="main">
+      <header class="topbar" id="topbar">
+        <button class="ibtn burger" type="button" data-act="open-nav" aria-label="Ouvrir le menu" data-ic="menu"></button>
+        <div class="ttl"><h1 id="pageTitle">KMK Campus</h1><div class="sub" id="pageSub"></div></div>
+        <button class="search" type="button" data-act="palette" aria-label="Rechercher"><span data-ic="search"></span><span>Rechercher un écran, un étudiant…</span><kbd class="kbd">Ctrl K</kbd></button>
+        <button class="ibtn" type="button" id="bellBtn" data-act="toggle-notifs" aria-label="Notifications" data-ic="bell"></button>
+        <button class="umenu-btn" type="button" id="userBtn" data-act="toggle-user" aria-label="Mon compte"></button>
+      </header>
+      <main class="stage" id="stage" tabindex="-1"></main>
+    </div>
+  </div>
+</div>
+
+<div class="pop pop-notif" id="popNotif" role="dialog" aria-label="Notifications"></div>
+<div class="pop pop-user" id="popUser" role="menu"></div>
+<div class="mask" id="mask"></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true"></aside>
+<div class="palette" id="palette" role="dialog" aria-label="Recherche"></div>
+<button class="guide-fab" id="guideFab" type="button" data-act="toggle-guide"></button>
+<div class="guide" id="guide"></div>
+<div id="toasts" aria-live="polite"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/views-common.js"></script>
+<script src="assets/js/views-etudiant.js"></script>
+<script src="assets/js/views-formateur.js"></script>
+<script src="assets/js/views-scolarite.js"></script>
+<script src="assets/js/views-pilotage.js"></script>
+<script>KMK.boot();</script>
+</body>
+</html>

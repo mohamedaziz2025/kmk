@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Connexion · KMK Campus</title>
+<meta name="description" content="Démo interactive KMK Campus — connexion KMK ID.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23E8F0FD'/%3E%3Cpath d='M32 15 55 24.5 32 34 9 24.5Z' fill='%231257E0'/%3E%3Cpath d='M17 28.5v9c0 4.5 6.7 8 15 8s15-3.5 15-8v-9' fill='none' stroke='%231257E0' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M55 24.5v11' stroke='%2338BDF8' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/kmk.css">
+</head>
+<body>
+<div class="login">
+
+  <!-- ===== panneau marque ===== -->
+  <aside class="lbrand">
+    <div class="top">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#E8F0FD"/><path d="M32 15 55 24.5 32 34 9 24.5Z" fill="#1257E0"/><path d="M17 28.5v9c0 4.5 6.7 8 15 8s15-3.5 15-8v-9" fill="none" stroke="#1257E0" stroke-width="3" stroke-linecap="round"/><path d="M55 24.5v11" stroke="#38BDF8" stroke-width="3" stroke-linecap="round"/></svg>
+      <div><div class="nm">KMK Campus</div><div class="tg">AI CAMPUS OS</div></div>
+      <a class="back" href="../index.html" data-ic="arrow-left">Présentation</a>
+    </div>
+    <div class="mid">
+      <div class="kicker">KMK ID · connexion unique</div>
+      <h1>Un compte.<br>Six espaces.</h1>
+      <p>Étudiant, formateur, scolarité, direction, finance ou parent : chacun se connecte avec le même identifiant
+         et ne voit que ce qui le concerne, avec son copilote KMK AI.</p>
+      <ul class="lfeat">
+        <li><span data-ic="shield-check"></span><span><b>Double authentification</b> obligatoire pour la direction, la finance et les formateurs</span></li>
+        <li><span data-ic="lock"></span><span><b>Droits par rôle</b> : chaque écran vérifie le profil connecté</span></li>
+        <li><span data-ic="history"></span><span><b>Journal d’audit</b> : connexions et actions tracées en direct</span></li>
+        <li><span data-ic="refresh-cw"></span><span><b>Données partagées</b> : une demande déposée par l’étudiant arrive chez la scolarité</span></li>
+      </ul>
+    </div>
+    <div class="foot">Démo statique · HTML, CSS et JavaScript · données fictives stockées dans votre navigateur</div>
+  </aside>
+
+  <!-- ===== panneau formulaire ===== -->
+  <main class="lpanel">
+    <div class="inner">
+
+      <!-- Étape 1 : connexion -->
+      <section id="step-login">
+        <h2>Connexion</h2>
+        <p class="lead">Accédez à votre espace KMK Campus.</p>
+        <div id="loginAlert"></div>
+        <form id="loginForm" novalidate>
+          <div class="field">
+            <label for="email">Adresse e-mail</label>
+            <div class="inwrap"><span data-ic="mail"></span>
+              <input class="input" id="email" name="email" type="email" autocomplete="username" placeholder="prenom.nom@kmk-campus.fr" required></div>
+            <div class="err" id="emailErr" hidden></div>
+          </div>
+          <div class="field">
+            <label for="password">Mot de passe</label>
+            <div class="inwrap"><span data-ic="lock"></span>
+              <input class="input" id="password" name="password" type="password" autocomplete="current-password" placeholder="••••••••" required>
+              <button type="button" class="eye" id="togglePwd" aria-label="Afficher le mot de passe" data-ic="eye"></button></div>
+            <div class="err" id="pwdErr" hidden></div>
+          </div>
+          <div class="opts">
+            <label class="check"><input type="checkbox" id="remember"> Rester connecté</label>
+            <button type="button" class="lk" id="forgotLink">Mot de passe oublié ?</button>
+          </div>
+          <button class="btn lg block" type="submit" id="loginBtn"><span data-ic="log-in"></span><span>Se connecter</span></button>
+        </form>
+        <div class="sep2">ou</div>
+        <button class="btn ghost lg block" id="ssoBtn" type="button"><span data-ic="building-2"></span>Connexion SSO de l’établissement</button>
+
+        <div class="sep2">Comptes de démonstration</div>
+        <div class="accts" id="accts"></div>
+        <div class="cred"><span data-ic="info"></span><span>Cliquez un compte pour remplir le formulaire. Mot de passe commun : <code id="demoPwd"></code>.
+          Les comptes marqués <span data-ic="shield-check" style="color:var(--g500);display:inline-flex;vertical-align:-3px"></span> demandent un code envoyé par SMS (simulé à l’écran).</span></div>
+
+        <div class="lfoot">
+          <button type="button" id="resetDemo"><span data-ic="rotate-ccw"></span>Réinitialiser les données de démo</button>
+          <span>© 2026 KMK Campus</span>
+        </div>
+      </section>
+
+      <!-- Étape 2 : double authentification -->
+      <section id="step-mfa" hidden>
+        <button class="stepback" data-back type="button"><span data-ic="arrow-left"></span>Retour</button>
+        <div class="mfa-ic" data-ic="smartphone"></div>
+        <h2>Vérification en deux étapes</h2>
+        <p class="lead" id="mfaLead">Saisissez le code à 6 chiffres envoyé par SMS.</p>
+        <div id="mfaAlert"></div>
+        <form id="mfaForm" novalidate>
+          <div class="otp" id="otp">
+            <input inputmode="numeric" maxlength="1" aria-label="Chiffre 1" autocomplete="one-time-code">
+            <input inputmode="numeric" maxlength="1" aria-label="Chiffre 2">
+            <input inputmode="numeric" maxlength="1" aria-label="Chiffre 3">
+            <input inputmode="numeric" maxlength="1" aria-label="Chiffre 4">
+            <input inputmode="numeric" maxlength="1" aria-label="Chiffre 5">
+            <input inputmode="numeric" maxlength="1" aria-label="Chiffre 6">
+          </div>
+          <button class="btn lg block" type="submit" id="mfaBtn"><span data-ic="shield-check"></span><span>Vérifier</span></button>
+        </form>
+        <p style="margin-top:14px;font-size:12.5px;color:var(--mu)">Rien reçu ? <button type="button" class="lk" id="resendBtn">Renvoyer le code</button></p>
+      </section>
+
+      <!-- Étape 3 : mot de passe oublié -->
+      <section id="step-forgot" hidden>
+        <button class="stepback" data-back type="button"><span data-ic="arrow-left"></span>Retour à la connexion</button>
+        <div class="mfa-ic" data-ic="key-round"></div>
+        <h2>Mot de passe oublié</h2>
+        <p class="lead">Indiquez votre adresse e-mail : nous vous envoyons un lien de réinitialisation valable 15 minutes.</p>
+        <div id="forgotAlert"></div>
+        <form id="forgotForm" novalidate>
+          <div class="field">
+            <label for="fEmail">Adresse e-mail</label>
+            <div class="inwrap"><span data-ic="mail"></span><input class="input" id="fEmail" type="email" placeholder="prenom.nom@kmk-campus.fr" required></div>
+          </div>
+          <button class="btn lg block" type="submit"><span data-ic="send"></span><span>Envoyer le lien</span></button>
+        </form>
+      </section>
+
+      <!-- Étape 4 : nouveau mot de passe -->
+      <section id="step-reset" hidden>
+        <button class="stepback" data-back type="button"><span data-ic="arrow-left"></span>Retour à la connexion</button>
+        <div class="mfa-ic" data-ic="lock"></div>
+        <h2>Nouveau mot de passe</h2>
+        <p class="lead" id="resetLead">Choisissez un nouveau mot de passe.</p>
+        <div id="resetAlert"></div>
+        <form id="resetForm" novalidate>
+          <div class="field">
+            <label for="np1">Nouveau mot de passe</label>
+            <input class="input" id="np1" type="password" autocomplete="new-password">
+            <div class="strength"><i id="strengthBar"></i></div>
+            <div class="help" id="strengthTxt">8 caractères minimum, avec majuscule, chiffre et symbole.</div>
+          </div>
+          <div class="field">
+            <label for="np2">Confirmer</label>
+            <input class="input" id="np2" type="password" autocomplete="new-password">
+          </div>
+          <button class="btn lg block" type="submit"><span data-ic="check"></span><span>Enregistrer</span></button>
+        </form>
+      </section>
+
+      <!-- Étape 5 : SSO -->
+      <section id="step-sso" hidden>
+        <button class="stepback" data-back type="button"><span data-ic="arrow-left"></span>Retour</button>
+        <div class="mfa-ic" data-ic="building-2"></div>
+        <h2>Fournisseur d’identité</h2>
+        <p class="lead">Simulation du portail SSO de l’établissement : choisissez le compte avec lequel continuer.</p>
+        <div class="accts" id="ssoAccts" style="grid-template-columns:1fr"></div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<!-- notification « téléphone » simulée -->
+<div class="phonetoast" id="phoneToast" role="status" aria-live="polite">
+  <div class="pi" data-ic="message-square"></div>
+  <div style="flex:1;min-width:0"><div class="t"><span id="ptApp">Messages</span><span>maintenant</span></div>
+    <b id="ptTitle">KMK Campus</b><p id="ptBody"></p></div>
+</div>
+<div id="toasts" aria-live="polite"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/login.js"></script>
+</body>
+</html>
